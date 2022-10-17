@@ -5,4 +5,4 @@ __pycache__/*
 *.rar
 *.zip
 *.slrum
-*.DS_Store
+.DS_Store
