@@ -44,7 +44,7 @@ def selectRecipes(recipe_file, image_folder, select_total=50):
         mined_ingredients = []
         for i, ingredient_candidate in enumerate(ingredient_candidates):
             # Assumption: ingredient shouldn't have prefix (should start with blank char)
-            if (' ' + ingredient_candidate) in recipe_ingredients:
+            if (' ' + ingredient_candidate) in recipe_ingredients.lower():
                 mined_ingredients.append((i + 1, ingredient_candidate))
 
         # Remove recipes with too few ingredients
