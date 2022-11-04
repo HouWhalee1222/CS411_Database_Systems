@@ -1,0 +1,14 @@
+npm init
+npm install express body-parser mysql nodemon cors
+
+node index.js
+
+In package.json:
+
+"scripts": {
+    "start": "node index.js",
+    "devStart": "nodemon index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+
+npm run devStart

@@ -1,0 +1,4 @@
+npm install axios
+npm install antd
+
+npm start
