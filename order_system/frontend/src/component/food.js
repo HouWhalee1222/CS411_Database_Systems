@@ -4,7 +4,8 @@ import React, { useState, useEffect } from "react";
 import { render } from "react-dom";
 import Axios from "axios";
 
-import { Input, Table} from 'antd';
+import { Input, Table, Button, Space } from 'antd';
+import { FireOutlined } from '@ant-design/icons';
 import "antd/dist/antd.css";
 
 
@@ -32,6 +33,18 @@ function Food() {
       })));
     });
   };
+
+  const searchPopular = () => {
+    Axios.get('http://localhost:3002/api/popular').then((response) => {
+        console.log(response);
+        setFoodList(response.data.map(row => ({  // Add the data to table
+            dishid: row.DishId,
+            dishname: row.DishName,
+            price: row.Price,
+            description: row.Description
+        })));
+    })
+  }
 
   const columns = [
     {
@@ -71,20 +84,29 @@ function Food() {
       <header className="App-header">
       <h1>Food Search</h1>
       {/* <img src={logo} className="App-logo" alt="logo" /> */}
-      <Search 
-        placeholder='input food name' 
-        enterButton="Search" 
-        allowClear 
-        style={{ width: 300, padding: 0, height: 80, margin: 0}} 
-        size="large"
-        onSearch={onSearch} 
-        onChange={(e) => setFoodName(e.target.value)}
-      />
+      {/* Group th search bar and the button using Space */}
+      <Space size='large'>
+        <Search 
+            placeholder='Input food name' 
+            enterButton="Search" 
+            allowClear 
+            style={{ width: 300, padding: 0, margin: 0}} 
+            size="large"
+            onSearch={onSearch} 
+            onChange={(e) => setFoodName(e.target.value)}
+        />
+        <Button 
+            style={{ background: "lightpink", height: 41, color: 'white', borderColor: 'azure'}} 
+            icon={<FireOutlined />}
+            onClick={searchPopular}/>
+      </Space>
+
 
       <Table 
         columns={columns} 
         dataSource={foodList} 
-        style = {{width: 800, height: 300, padding: 0}}
+        style = {{width: 800, height: 300, padding: 30}}
+        pagination = {{pageSize: 5}}
       />
       </header>
       
