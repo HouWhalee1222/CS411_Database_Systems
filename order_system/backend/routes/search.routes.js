@@ -3,11 +3,8 @@ module.exports = (app) => {
   
     var router = require("express").Router();
   
-    // // Create a new post
-    // router.post("/", search.create);
-  
-    // Retrieve all like
-    // router.get("/", search.findAll);
+    // Add food to order with amount 1
+    router.post("/", search.addFood);
   
     // Retrieve a single post with id
     router.get("/", search.getFood);

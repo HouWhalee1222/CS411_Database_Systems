@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import { render } from "react-dom";
 import Axios from "axios";
 
-import { Input, Table} from 'antd';
+import { Space, Input, Table} from 'antd';
 import "antd/dist/antd.css";
 
 
@@ -13,6 +13,7 @@ function Food() {
   const [foodName, setFoodName] = useState('');
   const [foodList, setFoodList] = useState([]);
   const {Search} = Input;
+
 
   const onSearch = (value) => {
     // console.log(value);
@@ -32,6 +33,11 @@ function Food() {
       })));
     });
   };
+
+  function onInsert() {
+    console.log("FoodName:", foodName);
+    alert('success insert');
+  }
 
   const columns = [
     {
@@ -54,6 +60,16 @@ function Food() {
       dataIndex: 'description',
       key: 'description',
     },
+    {
+        title: 'Action',
+        key: 'action',
+        render: (_, record) => (
+          <Space size="middle">
+            <a href="">Add {record.name}</a>
+            <a href="">Delete</a>
+          </Space>
+        ),
+      },
   ];
 
   // const testData = [
@@ -80,6 +96,7 @@ function Food() {
         onSearch={onSearch} 
         onChange={(e) => setFoodName(e.target.value)}
       />
+
 
       <Table 
         columns={columns} 
