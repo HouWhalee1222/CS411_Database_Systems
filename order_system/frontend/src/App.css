@@ -26,6 +26,30 @@
   color: black;
 }
 
+.App-router {
+  align-items: center;
+}
+
+.card-wrapper {
+  background-color: azure;
+  min-height: 100vh;
+  min-width: 200vh;
+  width: 1000;
+  display: flex;
+  flex-direction: column;
+  align-items:center;
+  text-align: center;
+  justify-content: center;
+  margin: auto;
+  padding: 70px, 0;
+  top: 50%;
+}
+
+
+.card {
+  width: 200,
+}
+
 .form {
   margin-top:1cm;
 }
