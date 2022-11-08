@@ -14,6 +14,7 @@ app.get('/', (req, res) => {
 });
 
 require("./routes/search.routes")(app);
+require("./routes/popular.routes")(app);
 
 
 app.listen(3002, () => {
