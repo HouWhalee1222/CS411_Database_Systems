@@ -13,8 +13,9 @@ exports.getFood = (req, res) => {
 
 
 exports.addFood = (req, res) => {
-    const orderId = req.query.orderId;
-    const dishId = req.query.dishId;
+    const orderId = req.body.orderId;
+    const dishId = req.body.dishId;
+    console.log("orderid:", orderId, " dishid:", dishId);
     const amount = 1;
     const sqlCommand = `INSERT INTO OrderDishes VALUES (${orderId},${dishId},${amount})`;
     console.log("SQL:", sqlCommand);

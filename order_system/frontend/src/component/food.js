@@ -35,6 +35,21 @@ function Food() {
     });
   };
 
+  const addFood = (value) => {
+    var orderid = 1;
+    var dishid = value;
+
+    console.log(orderid);
+    console.log(dishid);
+
+    Axios.post('http://localhost:3002/api/search', {
+        orderId: orderid,
+        dishId: dishid
+    }).then((response) => {
+      console.log(response.data);
+    });
+  };
+
   const searchPopular = () => {
     Axios.get('http://localhost:3002/api/popular').then((response) => {
         console.log(response);
@@ -46,6 +61,7 @@ function Food() {
         })));
     })
   }
+
 
   const columns = [
     {
@@ -68,16 +84,15 @@ function Food() {
       dataIndex: 'description',
       key: 'description',
     },
-    {
-        title: 'Action',
-        key: 'action',
-        render: (_, record) => (
-          <Space size="middle">
-            <a href="">Add {record.name}</a>
-            <a href="">Delete</a>
-          </Space>
-        ),
-      },
+    // {
+    //     title: 'Action',
+    //     key: 'action',
+    //     render: (_, record) => (
+    //       <Space size="middle">
+    //         <Button type="primary" onClick={addFood}>Add</Button>
+    //       </Space>
+    //     ),
+    //   },
   ];
 
   // const testData = [
@@ -111,6 +126,19 @@ function Food() {
             icon={<FireOutlined />}
             onClick={searchPopular}/>
       </Space>
+        <p></p>
+        <p></p>
+      <Space size='middle'>
+        <Search 
+            placeholder='Input dish id' 
+            enterButton="Add dish" 
+            allowClear 
+            style={{ width: 300, padding: 0, margin: 0}} 
+            size="middle"
+            // onClick={addFood}
+            onSearch={addFood}
+        />
+      </Space>
 
 
 
@@ -119,7 +147,10 @@ function Food() {
         dataSource={foodList} 
         style = {{width: 800, height: 300, padding: 30}}
         pagination = {{pageSize: 5}}
+        // onClick={insertFood}
       />
+
+
       </header>
       
     </div>
