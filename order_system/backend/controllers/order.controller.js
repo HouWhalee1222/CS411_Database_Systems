@@ -1,0 +1,102 @@
+const db = require('../db');
+
+function getOrderDishId(req) {
+    const OrderId = req.query.OrderId;
+    const DishId = req.query.DishId;
+
+    console.log("addDish", "OrderId:", OrderId, "DishId:", DishId);
+    return [OrderId, DishId];
+}
+
+function genSelectOrderSQL(OrderId) {
+    sql = `SELECT d.DishId, d.DishName, d.Price, o.Amount, d.Price * o.Amount AS TotalDishPrice, d.ImageUrl\
+            FROM OrderDishes o NATURAL JOIN Dishes d\
+            WHERE o.OrderId = ${OrderId}`;
+
+    console.log("SQL:", sql);
+    return sql;
+}
+
+function genSelectOrderDishSQL(OrderId, DishId) {
+    sql = `SELECT d.DishId, d.DishName, d.Price, o.Amount, d.Price * o.Amount AS TotalDishPrice, d.ImageUrl\
+            FROM OrderDishes o NATURAL JOIN Dishes d\
+            WHERE o.OrderId = ${OrderId} AND d.DishId = ${DishId}`;
+
+    console.log("SQL:", sql);
+    return sql;
+}
+
+function genUpdateSQL(OrderId, DishId, update_val) {
+    sql = `UPDATE OrderDishes\
+            SET Amount = Amount + ${update_val}\
+            WHERE OrderId = ${OrderId} AND DishId = ${DishId}`;
+
+    console.log("SQL:", sql);
+    return sql;
+}
+
+function genDeleteSQL(OrderId, DishId) {
+    sql = `DELETE FROM OrderDishes\
+            WHERE OrderId = ${OrderId} AND DishId = ${DishId}`;
+
+    console.log("SQL:", sql);
+    return sql;
+}
+
+function returnOrderResult(OrderId, res) {
+    console.log("Return order for OrderId =", OrderId)
+
+    let sqlCommand = genSelectOrderSQL(OrderId);
+    db.query(sqlCommand, (err, result) => {
+        res.send(result);
+    });
+}
+
+exports.getOrder = (req, res) => {
+    const OrderId = req.query.OrderId;
+    console.log("getOrder", "OrderId:", OrderId);
+
+    let sqlCommand = genSelectOrderSQL(OrderId);
+    db.query(sqlCommand, (err, result) => {
+        res.send(result);
+    });
+
+};
+
+exports.addDish = (req, res) => {
+    const [OrderId, DishId] = getOrderDishId(req);
+
+    let sqlCommand = genUpdateSQL(OrderId, DishId, 1);
+    db.query(sqlCommand);
+
+    returnOrderResult(OrderId, res)
+};
+
+exports.minusDish = (req, res) => {
+    const [OrderId, DishId] = getOrderDishId(req);
+
+    let sqlCommand = genSelectOrderDishSQL(OrderId, DishId);
+    db.query(sqlCommand, (err, result) => {
+        let amount = result[0].Amount;
+
+        // Remove the record if the amount will become 0
+        sqlCommand = "";
+        if (amount > 1) {
+            sqlCommand = genUpdateSQL(OrderId, DishId, -1);
+        } else {
+            sqlCommand = genDeleteSQL(OrderId, DishId);
+        }
+        db.query(sqlCommand);
+
+        returnOrderResult(OrderId, res)
+    });
+};
+
+exports.deleteDish = (req, res) => {
+    const [OrderId, DishId] = getOrderDishId(req);
+
+    let sqlCommand = genDeleteSQL(OrderId, DishId);
+    db.query(sqlCommand);
+
+    returnOrderResult(OrderId, res)
+};
