@@ -5,14 +5,20 @@ import { render } from "react-dom";
 import Axios from "axios";
 
 import { Input, Table, Button, Space } from 'antd';
-import { FireOutlined } from '@ant-design/icons';
+import { FireOutlined, PlusSquareOutlined, MinusSquareOutlined, CloseSquareOutlined } from '@ant-design/icons';
 import "antd/dist/antd.css";
 
 
-function timeout(delay) {
-    return new Promise( res => setTimeout(res, delay) );
+function showList(response, setOrderList) {
+  console.log(response.data);
+  setOrderList(response.data.map(row => ({  // Add the data to table
+      dish_id: row.DishId,
+      dish_name: row.DishName,
+      price: row.Price,
+      amount: row.Amount,
+      total_dish_price: row.TotalDishPrice
+  })));
 }
-
 
 // Should name the function starting with a capital letter!!
 function Order() {
@@ -20,80 +26,52 @@ function Order() {
   const [orderList, setOrderList] = useState([]);
   const {Search} = Input;
 
+  const base_url = 'http://localhost:3002/api/order/';
+
   const onAdd = (DishId) => {
     console.log("onAdd", "OrderId:", OrderId, "DishId", DishId);
-    Axios.get('http://localhost:3002/api/modifyOrder/add', {
+    Axios.get(base_url + 'add/', {
       params: {
         OrderId: OrderId,
         DishId: DishId
       }
     }).then((response) => {
-        console.log(response.data);
-        setOrderList(response.data.map(row => ({  // Add the data to table
-            dish_id: row.DishId,
-            dish_name: row.DishName,
-            price: row.Price,
-            amount: row.Amount,
-            total_dish_price: row.TotalDishPrice
-      })));
+        showList(response, setOrderList);
     });
   };
 
-  const onMinus = (DishId, Amount) => {
-    console.log("onAdd", "OrderId:", OrderId, "DishId", DishId, "Amount:", Amount);
-    Axios.get('http://localhost:3002/api/modifyOrder/minus', {
+  const onMinus = (DishId) => {
+    console.log("onMinus", "OrderId:", OrderId, "DishId", DishId);
+    Axios.get(base_url + 'minus/', {
       params: {
         OrderId: OrderId,
-        DishId: DishId,
-        Amount: Amount
+        DishId: DishId
       }
     }).then((response) => {
-        console.log(response.data);
-        setOrderList(response.data.map(row => ({  // Add the data to table
-            dish_id: row.DishId,
-            dish_name: row.DishName,
-            price: row.Price,
-            amount: row.Amount,
-            total_dish_price: row.TotalDishPrice
-      })));
+        showList(response, setOrderList);
     });
   };
 
   const onDelete = (DishId) => {
     console.log("onDelete", "OrderId:", OrderId, "DishId", DishId);
-    Axios.get('http://localhost:3002/api/modifyOrder/delete', {
+    Axios.get(base_url + 'delete/', {
       params: {
         OrderId: OrderId,
         DishId: DishId
       }
     }).then((response) => {
-        console.log(response.data);
-        setOrderList(response.data.map(row => ({  // Add the data to table
-            dish_id: row.DishId,
-            dish_name: row.DishName,
-            price: row.Price,
-            amount: row.Amount,
-            total_dish_price: row.TotalDishPrice
-      })));
+        showList(response, setOrderList);
     });
   };
 
   const onSearch = (value) => {
     console.log("onSearch", "OrderId:", OrderId);
-    Axios.get('http://localhost:3002/api/searchOrder', {
+    Axios.get(base_url + 'search/', {
       params: {
         OrderId: OrderId
       }
     }).then((response) => {
-    //   alert('success search');
-      console.log(response.data);
-      setOrderList(response.data.map(row => ({  // Add the data to table
-        dish_id: row.DishId,
-        dish_name: row.DishName,
-        price: row.Price,
-        amount: row.Amount,
-        total_dish_price: row.TotalDishPrice
-      })));
+        showList(response, setOrderList);
     });
   };
 
@@ -124,13 +102,19 @@ function Order() {
       key: 'total_dish_price',
     },
     {
-        title: 'Action',
-        key: 'action',
+        title: 'Actions',
+        key: 'actions',
         render: (_, record) => (
           <Space size="middle">
-            <a onClick={() => onAdd(record.dish_id)}>+</a>
-            <a onClick={() => onMinus(record.dish_id, record.amount)}>-</a>
-            <a onClick={() => onDelete(record.dish_id)}>Delete</a>
+            <a onClick={() => onAdd(record.dish_id)}>
+                <PlusSquareOutlined style={{ fontSize: '1.25em' }}/>
+            </a>
+            <a onClick={() => onMinus(record.dish_id)}>
+                <MinusSquareOutlined style={{ fontSize: '1.25em' }}/>
+            </a>
+            <a onClick={() => onDelete(record.dish_id)}>
+                <CloseSquareOutlined style={{ fontSize: '1.25em' }}/>
+            </a>
           </Space>
         ),
     },
@@ -152,11 +136,6 @@ function Order() {
             onSearch={onSearch}
             onChange={(e) => setOrderId(e.target.value)}
         />
-        {/* <Button
-            style={{ background: "lightpink", height: 41, color: 'white', borderColor: 'azure'}}
-            icon={<FireOutlined />}
-            onClick={searchPopular}
-        /> */}
       </Space>
 
 
