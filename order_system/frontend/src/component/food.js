@@ -1,10 +1,10 @@
 import './../App.css';
 
-import React, { useState, useEffect } from "react";
-import { render } from "react-dom";
+import React, { useState } from "react";
+// import { render } from "react-dom";
 import Axios from "axios";
 
-import { Input, Table, Button, Space } from 'antd';
+import { Input, Table, Button, Space} from 'antd';
 import { FireOutlined } from '@ant-design/icons';
 import "antd/dist/antd.css";
 
@@ -15,11 +15,12 @@ function Food() {
   const [foodList, setFoodList] = useState([]);
   const {Search} = Input;
 
+  const search_url = 'http://localhost:3002/api/search';
 
   const onSearch = (value) => {
     // console.log(value);
     console.log("FoodName:", foodName);
-    Axios.get('http://localhost:3002/api/search', {
+    Axios.get(search_url, {
       params: {
         foodName: foodName
       }
@@ -35,20 +36,17 @@ function Food() {
     });
   };
 
-  const addFood = (value) => {
-    var orderid = 1;
-    var dishid = value;
+  const onAdd = (orderid, dishid) => {
+    console.log("onAdd", "OrderId:", orderid, "DishId", dishid);
 
-    console.log(orderid);
-    console.log(dishid);
-
-    Axios.post('http://localhost:3002/api/search', {
+    Axios.post(search_url, {
         orderId: orderid,
         dishId: dishid
     }).then((response) => {
       console.log(response.data);
     });
   };
+
 
   const searchPopular = () => {
     Axios.get('http://localhost:3002/api/popular').then((response) => {
@@ -84,15 +82,31 @@ function Food() {
       dataIndex: 'description',
       key: 'description',
     },
-    // {
-    //     title: 'Action',
-    //     key: 'action',
-    //     render: (_, record) => (
-    //       <Space size="middle">
-    //         <Button type="primary" onClick={addFood}>Add</Button>
-    //       </Space>
-    //     ),
-    //   },
+    {
+        title: 'Actions',
+        key: 'actions',
+        render: (_, record) => (
+          <Space size="large">
+            {/* <a onClick={() => onAdd(record.dishid)}>
+                <PlusSquareOutlined style={{ fontSize: '1.25em' }}/>
+            </a> */}
+            
+            {/* <Input.Group compact>
+            <Input
+                placeholder='Input order id' 
+            />
+            <Button type="primary" onClick={ (e) => onAdd(e.target.value, record.dishid)}>Add</Button>
+            </Input.Group> */}
+
+            <Search 
+                placeholder='orderid' 
+                enterButton="Add" 
+                allowClear 
+                onSearch={(orderid) => onAdd(orderid, record.dishid)}
+            />            
+          </Space>
+        ),
+    },
   ];
 
   // const testData = [
@@ -126,7 +140,7 @@ function Food() {
             icon={<FireOutlined />}
             onClick={searchPopular}/>
       </Space>
-        <p></p>
+        {/* <p></p>
         <p></p>
       <Space size='middle'>
         <Search 
@@ -138,7 +152,7 @@ function Food() {
             // onClick={addFood}
             onSearch={addFood}
         />
-      </Space>
+      </Space> */}
 
 
 
@@ -147,7 +161,6 @@ function Food() {
         dataSource={foodList} 
         style = {{width: 800, height: 300, padding: 30}}
         pagination = {{pageSize: 5}}
-        // onClick={insertFood}
       />
 
 
