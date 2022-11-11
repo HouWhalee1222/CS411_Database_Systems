@@ -1,6 +1,6 @@
 import './../App.css';
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Axios from "axios";
 
 import AvaImg from '../asset/avatar.jpeg';
@@ -11,11 +11,11 @@ import "antd/dist/antd.css";
 
 // Should name the function starting with a capital letter!!
 function Customer() {
-    const [CusList, setCusList] = useState([]);
+    const [cusList, setCusList] = useState([]);
 
-    const showCusList = () => {
+    // Similar to componentDidMount and componentDidUpdate:
+    useEffect(() => {
         Axios.get("http://localhost:3002/api/customer").then((response) => {
-            console.log(response);
             setCusList(response.data.map(row => ({  // Add the data to table
                 id: row.CustomerId,
                 name: row.Name,
@@ -23,9 +23,7 @@ function Customer() {
                 totalprice: row.TotalPrice
             })));
         })
-    };
-
-    showCusList();
+    });
 
   return (
     <div className="App">
@@ -36,7 +34,7 @@ function Customer() {
             <List
             className='list'
             itemLayout="horizontal"
-            dataSource={CusList}
+            dataSource={cusList}
             renderItem={(item) => (
             <List.Item>
                 <List.Item.Meta
