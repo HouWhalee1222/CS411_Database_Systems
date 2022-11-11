@@ -2,7 +2,7 @@ const db = require('../db');
 
 
 function genSelectOrderDishSQL(OrderId, DishId) {
-    sql = `SELECT COUNT(*)\
+    sql = `SELECT d.DishId, d.DishName, d.Price, o.Amount, d.Price * o.Amount AS TotalDishPrice, d.ImageUrl\
             FROM OrderDishes o NATURAL JOIN Dishes d\
             WHERE o.OrderId = ${OrderId} AND d.DishId = ${DishId}`;
 
