@@ -9,6 +9,7 @@ exports.getPopular = (req, res) => {
     ORDER BY COUNT(FavoriteFood) DESC, d.Price, d.DishName, Ingredient_Count LIMIT 10`;
     console.log(sqlCommand);
     db.query(sqlCommand, (err, result) => {
+        console.log(result);
         res.send(result);
     });
 };
