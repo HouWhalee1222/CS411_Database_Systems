@@ -2,7 +2,7 @@ const db = require('../db');
 
 exports.getPopular = (req, res) => {
     // Select the most popular 10 food
-    const sqlCommand = `SELECT d.DishId, d.DishName, d.Price, d.Description
+    const sqlCommand = `SELECT d.DishId, d.DishName, d.Price, d.Description, d.ImageUrl
     FROM Customers c JOIN Dishes d ON c.FavoriteFood = d.DishId JOIN
     (SELECT DishId, COUNT(IngredientId) as Ingredient_Count FROM Recipes GROUP BY DishId) as t ON c.FavoriteFood = t.DishId
     GROUP BY c.FavoriteFood

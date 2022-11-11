@@ -4,7 +4,7 @@ import React, { useState } from "react";
 // import { render } from "react-dom";
 import Axios from "axios";
 
-import { Input, Table, Button, Space} from 'antd';
+import { Input, Table, Button, Space, Image } from 'antd';
 import { FireOutlined } from '@ant-design/icons';
 import "antd/dist/antd.css";
 
@@ -17,6 +17,16 @@ function Food() {
 
   const search_url = 'http://localhost:3002/api/search';
 
+  const showList = (response) => {
+    setFoodList(response.data.map(row => ({  // Add the data to table
+        dishid: row.DishId,
+        dishname: row.DishName,
+        price: row.Price,
+        description: row.Description,
+        imageurl: row.ImageUrl
+    })));
+  }
+
   const onSearch = (value) => {
     // console.log(value);
     console.log("FoodName:", foodName);
@@ -27,12 +37,7 @@ function Food() {
     }).then((response) => {
       // alert('success search');
       console.log(response.data);
-      setFoodList(response.data.map(row => ({  // Add the data to table
-        dishid: row.DishId,
-        dishname: row.DishName,
-        price: row.Price,
-        description: row.Description
-      })));
+      showList(response);
     });
   };
 
@@ -51,17 +56,22 @@ function Food() {
   const searchPopular = () => {
     Axios.get('http://localhost:3002/api/popular').then((response) => {
         console.log(response);
-        setFoodList(response.data.map(row => ({  // Add the data to table
-            dishid: row.DishId,
-            dishname: row.DishName,
-            price: row.Price,
-            description: row.Description
-        })));
+        showList(response);
     })
   }
 
-
   const columns = [
+    {
+        title: 'Image',
+        dataIndex: 'image',
+        key: 'actions',
+        render: (_, record) => (
+            <Image
+                width={120}
+                src= {require('../asset/Food_Images/' + record.imageurl)}
+            />
+        ),
+    },
     {
       title: 'DishId',
       dataIndex: 'dishid',

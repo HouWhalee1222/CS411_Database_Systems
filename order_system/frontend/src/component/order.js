@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import { render } from "react-dom";
 import Axios from "axios";
 
-import { Input, Table, Button, Space } from 'antd';
+import { Input, Table, Button, Space, Image } from 'antd';
 import { FireOutlined, PlusSquareOutlined, MinusSquareOutlined, CloseSquareOutlined } from '@ant-design/icons';
 import "antd/dist/antd.css";
 
@@ -16,7 +16,8 @@ function showList(response, setOrderList) {
       dish_name: row.DishName,
       price: row.Price,
       amount: row.Amount,
-      total_dish_price: row.TotalDishPrice
+      total_dish_price: row.TotalDishPrice,
+      imageurl: row.ImageUrl
   })));
 }
 
@@ -76,6 +77,17 @@ function Order() {
   };
 
   const columns = [
+    {
+        title: 'Image',
+        dataIndex: 'image',
+        key: 'actions',
+        render: (_, record) => (
+            <Image
+                width={120}
+                src= {require('../asset/Food_Images/' + record.imageurl)}
+            />
+        ),
+    },
     {
       title: 'DishId',
       dataIndex: 'dish_id',
@@ -143,7 +155,7 @@ function Order() {
         columns={columns}
         dataSource={orderList}
         style = {{width: 800, height: 300, padding: 30}}
-        pagination = {{pageSize: 10}}
+        pagination = {{pageSize: 5}}
       />
       </header>
 

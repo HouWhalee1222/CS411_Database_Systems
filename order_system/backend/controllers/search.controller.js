@@ -2,7 +2,7 @@ const db = require('../db');
 
 
 function genSelectOrderDishSQL(OrderId, DishId) {
-    sql = `SELECT d.DishId, d.DishName, d.Price, o.Amount, d.Price * o.Amount AS TotalDishPrice, d.ImageUrl\
+    sql = `SELECT COUNT(*)\
             FROM OrderDishes o NATURAL JOIN Dishes d\
             WHERE o.OrderId = ${OrderId} AND d.DishId = ${DishId}`;
 
@@ -15,7 +15,7 @@ function genSelectOrderDishSQL(OrderId, DishId) {
 exports.getFood = (req, res) => {
     const foodName = req.query.foodName;
     console.log("Food Name:", foodName);
-    const sqlCommand = `SELECT DishId, DishName, Price, Description FROM Dishes WHERE DishName LIKE "%${foodName}%"`;
+    const sqlCommand = `SELECT * FROM Dishes WHERE DishName LIKE "%${foodName}%"`;
     console.log("SQL:", sqlCommand);
     db.query(sqlCommand, (err, result) => {
         res.send(result);
