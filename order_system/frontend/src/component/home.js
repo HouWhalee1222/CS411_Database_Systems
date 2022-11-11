@@ -2,6 +2,7 @@ import React from 'react';
 
 import foodImg from '../asset/food.png';
 import orderImg from '../asset/order.png';
+import customerImg from '../asset/customer.png'
 
 import {Card, Col, Row } from 'antd';
 import {Link} from 'react-router-dom';
@@ -39,6 +40,16 @@ function Home() {
                 cover={<img alt='Order' src={orderImg} height="250"/>}
               >
                 <Link to="/order">Make Order</Link>
+              </Card>
+            </Col>
+            <Col span={128}>
+              <Card 
+                title="Customer" 
+                className='card'
+                hoverable
+                cover={<img alt='Customer' src={customerImg} height="250"/>}
+              >
+                <Link to="/customer">Customer Service</Link>
               </Card>
             </Col>
           </Row>

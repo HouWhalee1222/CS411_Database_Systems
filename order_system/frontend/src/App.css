@@ -26,6 +26,14 @@
   color: black;
 }
 
+.Cus-header {
+  background-color: azure;
+  min-height: 150vh;
+  align-items:center;
+  font-size: calc(10px + 2vmin);
+  color: black;
+}
+
 .App-router {
   align-items: center;
 }
