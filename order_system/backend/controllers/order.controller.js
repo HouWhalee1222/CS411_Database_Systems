@@ -4,7 +4,6 @@ function getOrderDishId(req) {
     const OrderId = req.query.OrderId;
     const DishId = req.query.DishId;
 
-    console.log("addDish", "OrderId:", OrderId, "DishId:", DishId);
     return [OrderId, DishId];
 }
 
@@ -44,7 +43,7 @@ function genDeleteSQL(OrderId, DishId) {
 }
 
 function returnOrderResult(OrderId, res) {
-    console.log("Return order for OrderId =", OrderId)
+    console.log("Return order for OrderId =", OrderId);
 
     let sqlCommand = genSelectOrderSQL(OrderId);
     db.query(sqlCommand, (err, result) => {
@@ -54,13 +53,7 @@ function returnOrderResult(OrderId, res) {
 
 exports.getOrder = (req, res) => {
     const OrderId = req.query.OrderId;
-    console.log("getOrder", "OrderId:", OrderId);
-
-    let sqlCommand = genSelectOrderSQL(OrderId);
-    db.query(sqlCommand, (err, result) => {
-        res.send(result);
-    });
-
+    returnOrderResult(OrderId, res);
 };
 
 exports.addDish = (req, res) => {
@@ -69,7 +62,7 @@ exports.addDish = (req, res) => {
     let sqlCommand = genUpdateSQL(OrderId, DishId, 1);
     db.query(sqlCommand);
 
-    returnOrderResult(OrderId, res)
+    returnOrderResult(OrderId, res);
 };
 
 exports.minusDish = (req, res) => {
@@ -88,7 +81,7 @@ exports.minusDish = (req, res) => {
         }
         db.query(sqlCommand);
 
-        returnOrderResult(OrderId, res)
+        returnOrderResult(OrderId, res);
     });
 };
 
@@ -98,5 +91,5 @@ exports.deleteDish = (req, res) => {
     let sqlCommand = genDeleteSQL(OrderId, DishId);
     db.query(sqlCommand);
 
-    returnOrderResult(OrderId, res)
+    returnOrderResult(OrderId, res);
 };
