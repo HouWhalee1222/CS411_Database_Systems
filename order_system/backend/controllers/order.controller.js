@@ -8,9 +8,16 @@ function getOrderDishId(req) {
 }
 
 function genSelectOrderSQL(OrderId) {
-    sql = `SELECT d.DishId, d.DishName, d.Price, o.Amount, d.Price * o.Amount AS TotalDishPrice, d.ImageUrl\
-            FROM OrderDishes o NATURAL JOIN Dishes d\
-            WHERE o.OrderId = ${OrderId}`;
+    if (OrderId == "") {
+        sql = `SELECT d.DishId, d.DishName, d.Price, o.Amount, d.Price * o.Amount AS TotalDishPrice, d.ImageUrl\
+                FROM OrderDishes o NATURAL JOIN Dishes d\
+                WHERE o.OrderId >= ALL(SELECT OrderId FROM OrderDishes)`;
+    }
+    else {
+        sql = `SELECT d.DishId, d.DishName, d.Price, o.Amount, d.Price * o.Amount AS TotalDishPrice, d.ImageUrl\
+                FROM OrderDishes o NATURAL JOIN Dishes d\
+                WHERE o.OrderId = ${OrderId}`;
+    }
 
     console.log("SQL:", sql);
     return sql;
