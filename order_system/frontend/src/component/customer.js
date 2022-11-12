@@ -23,7 +23,7 @@ function Customer() {
                 totalprice: row.TotalPrice
             })));
         })
-    });
+    }, []);
 
   return (
     <div className="App">
