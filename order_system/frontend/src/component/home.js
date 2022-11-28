@@ -52,16 +52,6 @@ function Home() {
                 <Link to="/customer">Customer Service</Link>
               </Card>
             </Col>
-            <Col span={128}>
-              <Card 
-                title="Register" 
-                className='card'
-                hoverable
-                cover={<img alt='Register' src={customerImg} height="250"/>}
-              >
-                <Link to="/register">Register</Link>
-              </Card>
-            </Col>
           </Row>
         </div>
       </div>
