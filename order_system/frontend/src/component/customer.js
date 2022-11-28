@@ -7,7 +7,7 @@ import AvaImg from '../asset/avatar.jpeg';
 import { Avatar, List, Col, Row } from 'antd';
 import "antd/dist/antd.css";
 
-
+import { server_address, backend_port } from './server_config'
 
 // Should name the function starting with a capital letter!!
 function Customer() {
@@ -15,7 +15,7 @@ function Customer() {
 
     // Similar to componentDidMount and componentDidUpdate:
     useEffect(() => {
-        Axios.get("http://localhost:3002/api/customer").then((response) => {
+        Axios.get(server_address + ':' + backend_port + '/api/customer').then((response) => {
             setCusList(response.data.map(row => ({  // Add the data to table
                 id: row.CustomerId,
                 name: row.Name,
@@ -47,7 +47,7 @@ function Customer() {
             />
         </Col>
       </Row>
-        
+
 
 
       </header>

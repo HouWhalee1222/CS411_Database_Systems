@@ -8,6 +8,7 @@ import { Input, Table, Button, Space, Image } from 'antd';
 import { FireOutlined } from '@ant-design/icons';
 import "antd/dist/antd.css";
 
+import { server_address, backend_port } from './server_config'
 
 // Should name the function starting with a capital letter!!
 function Food() {
@@ -15,7 +16,8 @@ function Food() {
   const [foodList, setFoodList] = useState([]);
   const {Search} = Input;
 
-  const search_url = 'http://localhost:3002/api/search';
+  const search_url = server_address + ':' + backend_port + '/api/search';
+  const popular_url = server_address + ':' + backend_port + '/api/popular';
 
   const showList = (response) => {
     setFoodList(response.data.map(row => ({  // Add the data to table
@@ -54,7 +56,7 @@ function Food() {
 
 
   const searchPopular = () => {
-    Axios.get('http://localhost:3002/api/popular').then((response) => {
+    Axios.get(popular_url).then((response) => {
         console.log(response);
         showList(response);
     })
@@ -64,7 +66,7 @@ function Food() {
     {
         title: 'Image',
         dataIndex: 'image',
-        key: 'actions',
+        key: 'image',
         render: (_, record) => (
             <Image
                 width={120}
@@ -100,20 +102,20 @@ function Food() {
             {/* <a onClick={() => onAdd(record.dishid)}>
                 <PlusSquareOutlined style={{ fontSize: '1.25em' }}/>
             </a> */}
-            
+
             {/* <Input.Group compact>
             <Input
-                placeholder='Input order id' 
+                placeholder='Input order id'
             />
             <Button type="primary" onClick={ (e) => onAdd(e.target.value, record.dishid)}>Add</Button>
             </Input.Group> */}
 
-            <Search 
-                placeholder='orderid' 
-                enterButton="Add" 
-                allowClear 
+            <Search
+                placeholder='orderid'
+                enterButton="Add"
+                allowClear
                 onSearch={(orderid) => onAdd(orderid, record.dishid)}
-            />            
+            />
           </Space>
         ),
     },
@@ -136,28 +138,28 @@ function Food() {
       {/* <img src={logo} className="App-logo" alt="logo" /> */}
       {/* Group th search bar and the button using Space */}
       <Space size='large'>
-        <Search 
-            placeholder='Input food name' 
-            enterButton="Search" 
-            allowClear 
-            style={{ width: 300, padding: 0, margin: 0}} 
+        <Search
+            placeholder='Input food name'
+            enterButton="Search"
+            allowClear
+            style={{ width: 300, padding: 0, margin: 0}}
             size="large"
-            onSearch={onSearch} 
+            onSearch={onSearch}
             onChange={(e) => setFoodName(e.target.value)}
         />
-        <Button 
-            style={{ background: "lightpink", height: 41, color: 'white', borderColor: 'azure'}} 
+        <Button
+            style={{ background: "lightpink", height: 41, color: 'white', borderColor: 'azure'}}
             icon={<FireOutlined />}
             onClick={searchPopular}/>
       </Space>
         {/* <p></p>
         <p></p>
       <Space size='middle'>
-        <Search 
-            placeholder='Input dish id' 
-            enterButton="Add dish" 
-            allowClear 
-            style={{ width: 300, padding: 0, margin: 0}} 
+        <Search
+            placeholder='Input dish id'
+            enterButton="Add dish"
+            allowClear
+            style={{ width: 300, padding: 0, margin: 0}}
             size="middle"
             // onClick={addFood}
             onSearch={addFood}
@@ -166,16 +168,16 @@ function Food() {
 
 
 
-      <Table 
-        columns={columns} 
-        dataSource={foodList} 
+      <Table
+        columns={columns}
+        dataSource={foodList}
         style = {{width: 800, height: 300, padding: 30}}
         pagination = {{pageSize: 5}}
       />
 
 
       </header>
-      
+
     </div>
   );
 }

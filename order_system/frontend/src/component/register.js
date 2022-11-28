@@ -4,79 +4,16 @@ import React, { useState, useEffect } from "react";
 import { render } from "react-dom";
 import Axios from "axios";
 
-import { Input, Table, Button, Space, Image, Checkbox, Form, AutoComplete, Cascader, Col, InputNumber, Row, Select} from 'antd';
-import { FireOutlined, PlusSquareOutlined, MinusSquareOutlined, CloseSquareOutlined } from '@ant-design/icons';
+import { Input, Button, Form } from 'antd';
 import "antd/dist/antd.css";
 
-
-function showList(response, setOrderList) {
-  console.log(response.data);
-  setOrderList(response.data.map(row => ({  // Add the data to table
-      dish_id: row.DishId,
-      dish_name: row.DishName,
-      price: row.Price,
-      amount: row.Amount,
-      total_dish_price: row.TotalDishPrice,
-      imageurl: row.ImageUrl
-  })));
-}
+import { server_address, backend_port } from './server_config'
 
 // Should name the function starting with a capital letter!!
 function Register() {
   const [form] = Form.useForm();
 
-  const [OrderId, setOrderId] = useState('');
-  const [orderList, setOrderList] = useState([]);
-  const {Search} = Input;
-
-  const base_url = 'http://localhost:3002/api/register/';
-
-  const onAdd = (DishId) => {
-    console.log("onAdd", "OrderId:", OrderId, "DishId", DishId);
-    Axios.get(base_url + 'add/', {
-      params: {
-        OrderId: OrderId,
-        DishId: DishId
-      }
-    }).then((response) => {
-        showList(response, setOrderList);
-    });
-  };
-
-  const onMinus = (DishId) => {
-    console.log("onMinus", "OrderId:", OrderId, "DishId", DishId);
-    Axios.get(base_url + 'minus/', {
-      params: {
-        OrderId: OrderId,
-        DishId: DishId
-      }
-    }).then((response) => {
-        showList(response, setOrderList);
-    });
-  };
-
-  const onDelete = (DishId) => {
-    console.log("onDelete", "OrderId:", OrderId, "DishId", DishId);
-    Axios.get(base_url + 'delete/', {
-      params: {
-        OrderId: OrderId,
-        DishId: DishId
-      }
-    }).then((response) => {
-        showList(response, setOrderList);
-    });
-  };
-
-  const onSearch = (value) => {
-    console.log("onSearch", "OrderId:", OrderId);
-    Axios.get(base_url + 'search/', {
-      params: {
-        OrderId: OrderId
-      }
-    }).then((response) => {
-        showList(response, setOrderList);
-    });
-  };
+  const base_url = server_address + ':' + backend_port + '/api/register/';
 
   const onFinish = (values) => {
     console.log('Success! Name:', values.name, 'Phone:', values.phone, 'Password:', values.password);
@@ -92,7 +29,7 @@ function Register() {
 
       if(response.data.sqlErrMessage) {
         console.log(response.data.sqlErrMessage);
-        if (response.data.sqlErrMessage == "Duplicate Phone Number")
+        if (response.data.sqlErrMessage === "Duplicate Phone Number")
           alert("Duplicate Phone Number! Try Again!");
       } else {
         console.log("Successfully Registered");

@@ -4,10 +4,11 @@ import React, { useState, useEffect } from "react";
 import { render } from "react-dom";
 import Axios from "axios";
 
-import { Input, Table, Button, Space, Image } from 'antd';
-import { FireOutlined, PlusSquareOutlined, MinusSquareOutlined, CloseSquareOutlined } from '@ant-design/icons';
+import { Input, Table, Space, Image } from 'antd';
+import { PlusSquareOutlined, MinusSquareOutlined, CloseSquareOutlined } from '@ant-design/icons';
 import "antd/dist/antd.css";
 
+import { server_address, backend_port } from './server_config'
 
 function showList(response, setOrderList) {
   console.log(response.data);
@@ -27,7 +28,7 @@ function Order() {
   const [orderList, setOrderList] = useState([]);
   const {Search} = Input;
 
-  const base_url = 'http://localhost:3002/api/order/';
+  const base_url = server_address + ':' + backend_port + '/api/order/';
 
   const onAdd = (DishId) => {
     console.log("onAdd", "OrderId:", OrderId, "DishId", DishId);
@@ -80,7 +81,7 @@ function Order() {
     {
         title: 'Image',
         dataIndex: 'image',
-        key: 'actions',
+        key: 'image',
         render: (_, record) => (
             <Image
                 width={120}
