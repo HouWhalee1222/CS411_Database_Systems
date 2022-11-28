@@ -23,8 +23,8 @@ function Home() {
         <p></p><p></p><p></p>
           <Row gutter={256}>
             <Col span={128}>
-              <Card 
-                title="Food" 
+              <Card
+                title="Food"
                 className='card'
                 hoverable
                 cover={<img alt='Food' src={foodImg}  height="250"/>}
@@ -33,8 +33,8 @@ function Home() {
               </Card>
             </Col>
             <Col span={128}>
-              <Card 
-                title="Order" 
+              <Card
+                title="Order"
                 className='card'
                 hoverable
                 cover={<img alt='Order' src={orderImg} height="250"/>}
@@ -43,8 +43,8 @@ function Home() {
               </Card>
             </Col>
             <Col span={128}>
-              <Card 
-                title="Customer" 
+              <Card
+                title="Customer"
                 className='card'
                 hoverable
                 cover={<img alt='Customer' src={customerImg} height="250"/>}
