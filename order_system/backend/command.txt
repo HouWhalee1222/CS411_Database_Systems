@@ -11,4 +11,5 @@ In package.json:
     "test": "echo \"Error: no test specified\" && exit 1"
   },
 
+npm i
 npm run devStart

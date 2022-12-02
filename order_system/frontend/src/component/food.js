@@ -69,7 +69,7 @@ function Food() {
         key: 'image',
         render: (_, record) => (
             <Image
-                width={120}
+                height={120}
                 src= {require('../asset/Food_Images/' + record.imageurl)}
             />
         ),
@@ -121,15 +121,6 @@ function Food() {
     },
   ];
 
-  // const testData = [
-  //   {
-  //     key: '1',
-  //     dishid: '10000',
-  //     dishname: 'test food',
-  //     price: 100,
-  //     description: 'test'
-  //   },
-  // ];
 
   return (
     <div className="App">

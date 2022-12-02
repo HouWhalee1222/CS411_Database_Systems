@@ -10,9 +10,9 @@ exports.getCustomer = (req, res) => {
     ORDER BY ArrivalCount DESC, c.Name
     LIMIT 10;`;
 
-    console.log(sqlCommand);
+    // console.log(sqlCommand);
     db.query(sqlCommand, (err, result) => {
-        console.log(result);
+        // console.log(result);
         res.send(result);
     });
 };
