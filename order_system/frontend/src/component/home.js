@@ -18,14 +18,8 @@ function Home() {
   return (
     <div className='App-router'>
       <div className='card-wrapper'>
-      <h1>Produce101 - Order System</h1>
-      <a
-      className="App-link"
-      href="https://github.com/cs411-alawini/fa22-cs411-Q-team050-Produce101"
-      target="_blank"
-      rel="noopener noreferrer">
-      GitHub Repos
-      </a>
+      <h1>Produce101 Order System</h1>
+      <h2><em>Welcome you, <b>Abdu</b>!</em></h2>
       <p></p><p></p><p></p>
         <Row gutter={256}>
           <Col span={128}>

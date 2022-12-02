@@ -5,7 +5,7 @@ exports.getLoginId = (req, res) => {
     const password = req.query.password;
     const sqlCommand = `SELECT Password, CustomerId FROM Customers WHERE Phone=${userid};`;
     db.query(sqlCommand, (err, result) => {
-        if (result.length > 0) {
+        if (result != null && result.length > 0) {
             const cusid = result[0].CustomerId;
             const realPassword = result[0].Password;
             if (password == realPassword) {
