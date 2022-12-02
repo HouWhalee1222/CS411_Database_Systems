@@ -29,7 +29,7 @@ BEGIN
 	END LOOP cloop;
 	CLOSE cur;
 
- 	-- Calculate total visiting time for a customer
+ 	-- Calculate total visiting times for a customer
 	SELECT COUNT(OrderId)
     INTO varNumVisit 
     FROM Orders
@@ -57,7 +57,7 @@ BEGIN
     END IF;
 			
 	-- Calculate price of this order
-	SELECT SUM(Price)
+	SELECT SUM(Price*Amount)
 	INTO varCurrTotalPrice
 	FROM OrderDishes NATURAL JOIN Dishes
 	WHERE OrderId = ordID;
