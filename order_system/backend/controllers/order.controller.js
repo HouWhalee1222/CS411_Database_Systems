@@ -7,6 +7,7 @@ function getOrderDishId(req) {
     return [OrderId, DishId];
 }
 
+
 function genSelectOrderSQL(OrderId) {
     if (OrderId == "") {
         sql = `SELECT d.DishId, d.DishName, d.Price, o.Amount, d.Price * o.Amount AS TotalDishPrice, d.ImageUrl\
@@ -99,4 +100,19 @@ exports.deleteDish = (req, res) => {
     db.query(sqlCommand);
 
     returnOrderResult(OrderId, res);
+};
+
+
+exports.checkoutOrder = (req, res) => {
+    const [OrderId, CustomerId] = [req.query.OrderId, req.query.CustomerId];
+
+    let call = `CALL GetTotalPrice(${CustomerId}, ${OrderId}, @total, @preTotal, @discount);`;
+    let get = `SELECT @total, @preTotal, @discount;`;
+    db.query(call);
+    db.query(get, (err, result) => {
+        console.log(get);
+        console.log(result);
+        res.send(result);
+    });
+
 };
