@@ -1,5 +1,5 @@
 DELIMITER //
-CREATE PROCEDURE GetTotalPrice(IN custID INT, IN ordID INT, OUT total REAL, OUT preTotal REAL, OUT discount REAL)
+CREATE PROCEDURE GetTotalPrice(IN custID INT, IN ordID INT, OUT total REAL, OUT oriTotal REAL, OUT preTotal REAL, OUT visits INT, OUT discount REAL)
 BEGIN
 
 	DECLARE varDiscount REAL;
@@ -28,15 +28,15 @@ BEGIN
 
 	END LOOP cloop;
 	CLOSE cur;
-    
 
-    -- Calculate total visiting time for a customer
+ 	-- Calculate total visiting time for a customer
 	SELECT COUNT(OrderId)
     INTO varNumVisit 
     FROM Orders
 	GROUP BY CustomerId
 	HAVING CustomerId = custID;
 
+    
     -- determine the discount
     IF(varPrevTotalPrice > 9000) THEN
         SET varDiscount = 0.7;
@@ -47,6 +47,14 @@ BEGIN
     ELSE
         SET varDiscount = 1.0;
     END IF;
+        
+    IF(varNumVisit > 30) THEN
+        SET varDiscount = varDiscount - 0.15;
+    ELSEIF(varNumVisit > 20) THEN
+        SET varDiscount = varDiscount - 0.1;
+    ELSEIF(varNumVisit > 10) THEN
+        SET varDiscount = varDiscount - 0.05;
+    END IF;
 			
 	-- Calculate price of this order
 	SELECT SUM(Price)
@@ -56,15 +64,19 @@ BEGIN
 
 	SET discount = varDiscount;
 	SET preTotal = varPrevTotalPrice;
+	SET oriTotal = varCurrTotalPrice;
+	SET visits = varNumVisit;
 	SET total = ROUND(varCurrTotalPrice * varDiscount, 2);
+	
+
+-- 	INSERT INTO Orders VALUES
+-- 	(varMaxOrderID, NOW(), NOW(), total, custID, 1);
 
 	UPDATE Orders SET TotalPrice = total WHERE OrderId = ordID;
+	DELETE FROM OrderDishes WHERE OrderId = ordID;
 
 END //
 DELIMITER ;
 
--- CALL GetTotalPrice(2, 1, @total, @preTotal, @discount);
--- SELECT @total, @preTotal, @discount;
-
-
--- DROP PROCEDURE IF EXISTS GetTotalPrice;
+CALL GetTotalPrice(5, 1, @total, @oriTotal, @preTotal, @visits, @discount);
+SELECT @total, @preTotal, @oriTotal, @visits, @discount;
