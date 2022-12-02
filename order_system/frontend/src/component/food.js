@@ -48,7 +48,8 @@ function Food() {
     console.log("FoodName:", foodName);
     Axios.get(search_url, {
       params: {
-        foodName: foodName
+        foodName: foodName,
+        id: id
       }
     }).then((response) => {
       // alert('success search');
@@ -71,7 +72,11 @@ function Food() {
 
 
   const searchPopular = () => {
-    Axios.get(popular_url).then((response) => {
+    Axios.get(popular_url, {
+      params: {
+        id: id
+      }
+    }).then((response) => {
         console.log(response);
         showList(response);
     })
@@ -84,7 +89,6 @@ function Food() {
         key: 'image',
         render: (_, record) => (
             <Image
-                // height={100}
                 width={120}
                 src= {require('../asset/Food_Images/' + record.imageurl)}
             />
@@ -104,11 +108,6 @@ function Food() {
       title: 'Price',
       dataIndex: 'price',
       key: 'price',
-    },
-    {
-      title: 'Description',
-      dataIndex: 'description',
-      key: 'description',
     },
     {
         title: 'Actions',
@@ -137,6 +136,15 @@ function Food() {
     },
   ];
 
+  // const testData = [
+  //   {
+  //     key: '1',
+  //     dishid: '10000',
+  //     dishname: 'test food',
+  //     price: 100,
+  //     description: 'test'
+  //   },
+  // ];
 
   return (
     <div className="App">
@@ -173,7 +181,7 @@ function Food() {
         <Search
             placeholder='Input dish id'
             enterButton="Add dish"
-            allowClear
+            allowClear3
             style={{ width: 300, padding: 0, margin: 0}}
             size="middle"
             // onClick={addFood}
@@ -184,11 +192,26 @@ function Food() {
 
 
       <Table
+        rowKey="dishid" 
         columns={columns}
+        expandable={{
+          expandedRowRender: (record) => (
+            <p
+              style={{
+                margin: 0,
+              }}
+            >
+              {record.description}
+            </p>
+          ),
+          // defaultExpandedRowKeys: true
+        }}
         dataSource={foodList}
         style = {{width: 800, height: 300, padding: 30}}
-        pagination = {{pageSize: 5}}
+        pagination = {{pageSize: 50}}
+        rowClassName={(record, index) => (index === 0 ? "red" : index === 1 ? "green" : "")}
       />
+
 
 
       </header>

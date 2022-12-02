@@ -11,7 +11,16 @@ function getCustomerInfo(req) {
 
 function genInsertSQL(CustomerId, Password, Name, Phone) {
     sql = `INSERT INTO Customers(CustomerId, Password, Name, Phone)\
-            VALUES(${CustomerId}, ${Password}, "${Name}", ${Phone})`;
+            VALUES(${CustomerId}, "${Password}", "${Name}", "${Phone}")`;
+
+    console.log("SQL:", sql);
+    return sql;
+}
+
+function genSelectCustomerIdSQL(Phone) {
+    sql = `SELECT c.CustomerId\
+            FROM Customers c\
+            WHERE c.Phone = ${Phone}`;
 
     console.log("SQL:", sql);
     return sql;
@@ -29,8 +38,12 @@ exports.submit = (req, res) => {
                 sqlErrMessage: err.sqlMessage
             };
             JSON.stringify(result);
+            res.send(result);
+        } else {
+            sqlCommand = genSelectCustomerIdSQL(Phone);
+            db.query(sqlCommand, (err, result) => {
+                res.send(result);
+            });
         }
-
-        res.send(result);
     });
 };

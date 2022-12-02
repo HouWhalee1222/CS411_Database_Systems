@@ -14,8 +14,26 @@ function genSelectOrderDishSQL(OrderId, DishId) {
 
 exports.getFood = (req, res) => {
     const foodName = req.query.foodName;
+    const id = req.query.id;
     console.log("Food Name:", foodName);
-    const sqlCommand = `SELECT * FROM Dishes WHERE DishName LIKE "%${foodName}%"`;
+    const sqlCommand = `SELECT DishId, DishName, Price, ImageUrl, Description
+                        FROM Dishes
+                        WHERE DishId = (
+                            SELECT FavoriteFood
+                            FROM Customers
+                            WHERE CustomerId = ${id})
+                        UNION
+                        SELECT DishId, DishName, Price, ImageUrl, Description
+                        FROM Dishes
+                        WHERE DishId = (
+                            SELECT od.DishId
+                            FROM Orders o NATURAL JOIN OrderDishes od
+                            WHERE CustomerId = ${id}
+                            GROUP BY od.DishId
+                            ORDER BY count(od.dishId) DESC
+                            LIMIT 1)
+                        UNION
+                        SELECT * FROM Dishes WHERE DishName LIKE "%${foodName}%"`;
     console.log("SQL:", sqlCommand);
     db.query(sqlCommand, (err, result) => {
         res.send(result);
