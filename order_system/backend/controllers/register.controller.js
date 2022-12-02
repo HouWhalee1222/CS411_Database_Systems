@@ -11,7 +11,7 @@ function getCustomerInfo(req) {
 
 function genInsertSQL(CustomerId, Password, Name, Phone) {
     sql = `INSERT INTO Customers(CustomerId, Password, Name, Phone)\
-            VALUES(${CustomerId}, ${Password}, "${Name}", ${Phone})`;
+            VALUES(${CustomerId}, "${Password}", "${Name}", ${Phone})`;
 
     console.log("SQL:", sql);
     return sql;
