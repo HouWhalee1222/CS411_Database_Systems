@@ -3,6 +3,7 @@ import './../App.css';
 import React, { useState } from "react";
 // import { render } from "react-dom";
 import Axios from "axios";
+import {useParams} from "react-router-dom";
 
 import { Input, Table, Button, Space, Image } from 'antd';
 import { FireOutlined } from '@ant-design/icons';
@@ -12,6 +13,9 @@ import { server_address, backend_port } from './server_config'
 
 // Should name the function starting with a capital letter!!
 function Food() {
+  const {id} = useParams();
+  console.log(id);
+
   const [foodName, setFoodName] = useState('');
   const [foodList, setFoodList] = useState([]);
   const {Search} = Input;
