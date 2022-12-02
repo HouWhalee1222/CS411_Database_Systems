@@ -6,6 +6,7 @@ import Order from './component/order';
 import Home from './component/home';
 import Customer from './component/customer';
 import Register from './component/register';
+import Welcome from './component/welcome';
 
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
@@ -14,6 +15,10 @@ const router = createBrowserRouter([
   {
     path: "/",
     element: <Home />
+  },
+  {
+    path: "/welcome",
+    element: <Welcome />
   },
   {
     path: "/food",
