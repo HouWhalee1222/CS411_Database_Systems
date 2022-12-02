@@ -4,7 +4,8 @@ import React, { useState, useEffect } from "react";
 import { render } from "react-dom";
 import Axios from "axios";
 
-import { Input, Table, Space, Image } from 'antd';
+import { Input, Table, Button, Space, Image } from 'antd';
+import { MoneyCollectOutlined } from '@ant-design/icons';
 import { PlusSquareOutlined, MinusSquareOutlined, CloseSquareOutlined } from '@ant-design/icons';
 import "antd/dist/antd.css";
 
@@ -76,6 +77,26 @@ function Order() {
         showList(response, setOrderList);
     });
   };
+
+  const onCheckout = () => {
+    console.log("onCheckout", "OrderId:", OrderId, "CustomerId:", 2);
+    Axios.get(base_url + 'checkout/', {
+      params: {
+        OrderId: OrderId,
+        CustomerId: 2
+      }
+    }).then((response) => {
+        console.log(response.data[0]);
+
+        alert(`
+        Check out success!\n \
+        You get ${response.data[0]["@discount"] * 100}% OFF on your order, since you've spent ${response.data[0]["@preTotal"]} here in the past.\n \
+        The price after discount is ${response.data[0]["@total"]}.\n \
+        Hope to see you again!`);
+
+    })
+  };
+
 
   const columns = [
     {
@@ -149,6 +170,12 @@ function Order() {
             onSearch={onSearch}
             onChange={(e) => setOrderId(e.target.value)}
         />
+        <Button
+            style={{ background: "green", height: 41, color: 'white', borderColor: 'azure'}}
+            icon={<MoneyCollectOutlined />}
+            onClick={onCheckout}>
+                Check Out
+        </Button>
       </Space>
 
 

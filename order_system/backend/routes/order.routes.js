@@ -15,5 +15,8 @@ module.exports = (app) => {
     // Delete a dish
     router.get("/delete", order.deleteDish);
 
+    // Checkout a order
+    router.get("/checkout", order.checkoutOrder);
+
     app.use("/api/order", router);
 };
