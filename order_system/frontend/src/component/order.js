@@ -1,8 +1,8 @@
 import './../App.css';
 
-import React, { useState, useEffect } from "react";
-import { render } from "react-dom";
+import React, { useState } from "react";
 import Axios from "axios";
+import {useParams} from "react-router-dom";
 
 import { Input, Table, Button, Space, Image } from 'antd';
 import { MoneyCollectOutlined } from '@ant-design/icons';
@@ -25,6 +25,9 @@ function showList(response, setOrderList) {
 
 // Should name the function starting with a capital letter!!
 function Order() {
+  const {id} = useParams();
+  console.log(id);
+
   const [OrderId, setOrderId] = useState('');
   const [orderList, setOrderList] = useState([]);
   const {Search} = Input;
@@ -79,20 +82,23 @@ function Order() {
   };
 
   const onCheckout = () => {
-    console.log("onCheckout", "OrderId:", OrderId, "CustomerId:", 2);
+    const CustomerId = 5;
+    console.log("onCheckout", "OrderId:", OrderId, "CustomerId:", CustomerId);
     Axios.get(base_url + 'checkout/', {
       params: {
         OrderId: OrderId,
-        CustomerId: 2
+        CustomerId: CustomerId
       }
     }).then((response) => {
         console.log(response.data[0]);
 
         alert(`
-        Check out success!\n \
-        You get ${response.data[0]["@discount"] * 100}% OFF on your order, since you've spent ${response.data[0]["@preTotal"]} here in the past.\n \
-        The price after discount is ${response.data[0]["@total"]}.\n \
+        Check out success!
+        You get ${100 - response.data[0]["@discount"] * 100}% OFF on your order, since you've visited for ${response.data[0]["@visits"]} times and spent $${response.data[0]["@preTotal"]} here in the past. 
+        The price after discount is $${response.data[0]["@total"]}. 
         Hope to see you again!`);
+
+        setOrderList([]);
 
     })
   };

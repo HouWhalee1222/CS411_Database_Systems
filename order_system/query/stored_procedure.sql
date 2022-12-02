@@ -6,7 +6,7 @@ BEGIN
     DECLARE varPrice REAL;
 	DECLARE varPrevTotalPrice REAL DEFAULT 0;
 	DECLARE varCurrTotalPrice REAL;
-	DECLARE varTmp REAL;
+	DECLARE varNumVisit REAL;
 	DECLARE exit_loop BOOLEAN DEFAULT FALSE;
 	
 
@@ -29,6 +29,14 @@ BEGIN
 	END LOOP cloop;
 	CLOSE cur;
     
+
+    -- Calculate total visiting time for a customer
+	SELECT COUNT(OrderId)
+    INTO varNumVisit 
+    FROM Orders
+	GROUP BY CustomerId
+	HAVING CustomerId = custID;
+
     -- determine the discount
     IF(varPrevTotalPrice > 9000) THEN
         SET varDiscount = 0.7;

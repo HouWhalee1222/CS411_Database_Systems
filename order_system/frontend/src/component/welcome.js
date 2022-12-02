@@ -13,8 +13,6 @@ import welcomeImg from '../asset/welcomeImg.jpg';
 
 // Should name the function starting with a capital letter!!
 function Welcome() {
-
-    const [customerId, setcustomerId] = useState(-1);
     const [shownError, setShownError] = useState(false);
 
     const showFail = () => {
@@ -37,11 +35,10 @@ function Welcome() {
             }).then((response) => {
                 const cusid = response.data.userid;
                 console.log(cusid);
-                setcustomerId(cusid);
                 if (cusid === -1) {
                     showFail();
                 } else {
-                    window.location.href = '/home';
+                    window.location.href = `/home/${cusid}`;
                 }
         });
     };
