@@ -5,7 +5,7 @@ import React, { useState } from "react";
 import Axios from "axios";
 
 import { Input, Table, Button, Space, Image } from 'antd';
-import { FireOutlined } from '@ant-design/icons';
+import { FireOutlined, PlusSquareOutlined } from '@ant-design/icons';
 import "antd/dist/antd.css";
 
 import { server_address, backend_port } from './server_config'
@@ -43,7 +43,8 @@ function Food() {
     });
   };
 
-  const onAdd = (orderid, dishid) => {
+  const onAdd = (dishid) => {
+    var orderid = 1;
     console.log("onAdd", "OrderId:", orderid, "DishId", dishid);
 
     Axios.post(search_url, {
@@ -99,9 +100,9 @@ function Food() {
         key: 'actions',
         render: (_, record) => (
           <Space size="large">
-            {/* <a onClick={() => onAdd(record.dishid)}>
+            <a onClick={() => onAdd(record.dishid)}>
                 <PlusSquareOutlined style={{ fontSize: '1.25em' }}/>
-            </a> */}
+            </a>
 
             {/* <Input.Group compact>
             <Input
@@ -110,12 +111,12 @@ function Food() {
             <Button type="primary" onClick={ (e) => onAdd(e.target.value, record.dishid)}>Add</Button>
             </Input.Group> */}
 
-            <Search
+            {/* <Search
                 placeholder='orderid'
                 enterButton="Add"
                 allowClear
                 onSearch={(orderid) => onAdd(orderid, record.dishid)}
-            />
+            /> */}
           </Space>
         ),
     },

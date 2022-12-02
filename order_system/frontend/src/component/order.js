@@ -79,7 +79,7 @@ function Order() {
   };
 
   const onCheckout = () => {
-    console.log("onCheckout", "OrderId:", OrderId, "CustomerId:", 2);
+    console.log("onCheckout", "OrderId:", OrderId, "CustomerId:", 5);
     Axios.get(base_url + 'checkout/', {
       params: {
         OrderId: OrderId,
@@ -90,9 +90,11 @@ function Order() {
 
         alert(`
         Check out success!\n \
-        You get ${response.data[0]["@discount"] * 100}% OFF on your order, since you've spent ${response.data[0]["@preTotal"]} here in the past.\n \
+        You get ${100 - response.data[0]["@discount"] * 100}% OFF on your order, since you've spent ${response.data[0]["@preTotal"]} here in the past.\n \
         The price after discount is ${response.data[0]["@total"]}.\n \
         Hope to see you again!`);
+
+        setOrderList([]);
 
     })
   };
