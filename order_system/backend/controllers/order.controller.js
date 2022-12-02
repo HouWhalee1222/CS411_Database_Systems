@@ -106,8 +106,8 @@ exports.deleteDish = (req, res) => {
 exports.checkoutOrder = (req, res) => {
     const [OrderId, CustomerId] = [req.query.OrderId, req.query.CustomerId];
 
-    let call = `CALL GetTotalPrice(${CustomerId}, ${OrderId}, @total, @preTotal, @visits, @discount);`;
-    let get = `SELECT @total, @preTotal, @visits, @discount;`;
+    let call = `CALL GetTotalPrice(${CustomerId}, ${OrderId}, @total, @oriTotal, @preTotal, @visits, @discount);`;
+    let get = `SELECT @total, @oriTotal, @preTotal, @visits, @discount;`;
     db.query(call);
     db.query(get, (err, result) => {
         console.log(call);

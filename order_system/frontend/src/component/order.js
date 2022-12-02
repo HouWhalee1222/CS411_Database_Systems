@@ -1,10 +1,10 @@
 import './../App.css';
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Axios from "axios";
 import {useParams} from "react-router-dom";
 
-import { Input, Table, Button, Space, Image } from 'antd';
+import { Input, Table, Button, Space, Image, Modal, Alert  } from 'antd';
 import { MoneyCollectOutlined } from '@ant-design/icons';
 import { PlusSquareOutlined, MinusSquareOutlined, CloseSquareOutlined } from '@ant-design/icons';
 import "antd/dist/antd.css";
@@ -28,11 +28,40 @@ function Order() {
   const {id} = useParams();
   console.log(id);
 
-  const [OrderId, setOrderId] = useState('');
+//   const [OrderId, setOrderId] = useState('');
+  const OrderId = 1;
   const [orderList, setOrderList] = useState([]);
   const {Search} = Input;
 
   const base_url = server_address + ':' + backend_port + '/api/order/';
+
+  const [shownError, setShownError] = useState(false);
+  const [beforePrice, setBeforePrice] = useState(0);
+  const [afterPrice, setAfterPrice] = useState(0);
+  const [sumPrice, setSumPrice] = useState(0);
+  const [discount, setDiscount] = useState(0);
+  const [visit, setVisit] = useState(0);
+  const [outInfo, setOutInfo] = useState("");
+
+
+  const showFail = () => {
+      setShownError(true);
+  }
+
+  const handleConfirm = () => {
+      setShownError(false);
+  }
+
+    // Similar to componentDidMount and componentDidUpdate:
+    useEffect(() => {
+        Axios.get(base_url + 'search/', {
+            params: {
+                OrderId: OrderId
+            }
+            }).then((response) => {
+                showList(response, setOrderList);
+            });
+    }, []);
 
   const onAdd = (DishId) => {
     console.log("onAdd", "OrderId:", OrderId, "DishId", DishId);
@@ -70,19 +99,28 @@ function Order() {
     });
   };
 
-  const onSearch = (value) => {
-    console.log("onSearch", "OrderId:", OrderId);
-    Axios.get(base_url + 'search/', {
-      params: {
-        OrderId: OrderId
-      }
-    }).then((response) => {
-        showList(response, setOrderList);
-    });
+//   const onSearch = (value) => {
+//     console.log("onSearch", "OrderId:", OrderId);
+//     Axios.get(base_url + 'search/', {
+//       params: {
+//         OrderId: OrderId
+//       }
+//     }).then((response) => {
+//         showList(response, setOrderList);
+//     });
+//   };
+
+  const setValue = ({beforePrice, visit, sumPrice, afterPrice, discount, outInfo}) => {
+    setBeforePrice(beforePrice);
+    setAfterPrice(afterPrice);
+    setSumPrice(sumPrice);
+    setDiscount(discount);
+    setVisit(visit);
+    setOutInfo(outInfo);
   };
 
   const onCheckout = () => {
-    const CustomerId = 5;
+    const CustomerId = id;
     console.log("onCheckout", "OrderId:", OrderId, "CustomerId:", CustomerId);
     Axios.get(base_url + 'checkout/', {
       params: {
@@ -92,11 +130,25 @@ function Order() {
     }).then((response) => {
         console.log(response.data[0]);
 
-        alert(`
-        Check out success!
-        You get ${100 - response.data[0]["@discount"] * 100}% OFF on your order, since you've visited for ${response.data[0]["@visits"]} times and spent $${response.data[0]["@preTotal"]} here in the past. 
-        The price after discount is $${response.data[0]["@total"]}. 
-        Hope to see you again!`);
+        // alert(`
+        // Check out success!
+        // You get ${100 - response.data[0]["@discount"] * 100}% OFF on your order, since you've visited for ${response.data[0]["@visits"]} times and spent $${response.data[0]["@preTotal"]} here in the past. 
+        // The price after discount is $${response.data[0]["@total"]}. 
+        // Hope to see you again!`);
+        const beforePrice = response.data[0]["@oriTotal"];
+        const visit = response.data[0]["@visits"];
+        const sumPrice = response.data[0]["@preTotal"];
+        const afterPrice = response.data[0]["@total"];
+        const discount = 100 - response.data[0]["@discount"] * 100;
+        const outInfo = `
+        Check out success! \
+        You get ${100 - response.data[0]["@discount"] * 100}% OFF on your order, \
+        since you've visited for ${response.data[0]["@visits"]} times and spent $${response.data[0]["@preTotal"]} here in the past. \
+        Oringinal price is $${response.data[0]["@oriTotal"]}. The price after discount is $${response.data[0]["@total"]}. \
+        Hope to see you again!`;
+        console.log(outInfo);
+
+        setValue({beforePrice, visit, sumPrice, afterPrice, discount, outInfo});
 
         setOrderList([]);
 
@@ -167,7 +219,7 @@ function Order() {
       {/* <img src={logo} className="App-logo" alt="logo" /> */}
       {/* Group th search bar and the button using Space */}
       <Space size='large'>
-        <Search
+        {/* <Search
             placeholder='Input OrderId'
             enterButton="Search"
             allowClear
@@ -175,14 +227,24 @@ function Order() {
             size="large"
             onSearch={onSearch}
             onChange={(e) => setOrderId(e.target.value)}
-        />
+        /> */}
         <Button
             style={{ background: "green", height: 41, color: 'white', borderColor: 'azure'}}
             icon={<MoneyCollectOutlined />}
-            onClick={onCheckout}>
+            onClick={() => {onCheckout(); showFail();}}>
+            {/* onClick={onCheckout}> */}
                 Check Out
         </Button>
       </Space>
+
+      <Modal title="Info" open={shownError} onOk={handleConfirm} onCancel={handleConfirm}>
+        <Alert
+        message="Success Tips"
+        description={outInfo}
+        type="success"
+        showIcon
+        />
+      </Modal>
 
 
       <Table

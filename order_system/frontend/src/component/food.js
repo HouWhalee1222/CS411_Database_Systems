@@ -5,7 +5,7 @@ import React, { useState } from "react";
 import Axios from "axios";
 import {useParams} from "react-router-dom";
 
-import { Input, Table, Button, Space, Image } from 'antd';
+import { Input, Table, Button, Space, Image, Modal, Alert } from 'antd';
 import { FireOutlined, PlusSquareOutlined } from '@ant-design/icons';
 import "antd/dist/antd.css";
 
@@ -22,6 +22,16 @@ function Food() {
 
   const search_url = server_address + ':' + backend_port + '/api/search';
   const popular_url = server_address + ':' + backend_port + '/api/popular';
+
+  const [shownError, setShownError] = useState(false);
+
+  const showFail = () => {
+      setShownError(true);
+  }
+
+  const handleConfirm = () => {
+      setShownError(false);
+  }
 
   const showList = (response) => {
     setFoodList(response.data.map(row => ({  // Add the data to table
@@ -105,7 +115,7 @@ function Food() {
         key: 'actions',
         render: (_, record) => (
           <Space size="large">
-            <a onClick={() => onAdd(record.dishid)}>
+            <a onClick={() => {onAdd(record.dishid); showFail();}}>
                 <PlusSquareOutlined style={{ fontSize: '1.25em' }}/>
             </a>
 
@@ -149,6 +159,14 @@ function Food() {
             icon={<FireOutlined />}
             onClick={searchPopular}/>
       </Space>
+      <Modal title="Info" open={shownError} onOk={handleConfirm} onCancel={handleConfirm}>
+        <Alert
+        message="Success Tips"
+        description="Add dish success!"
+        type="success"
+        showIcon
+        />
+      </Modal>
         {/* <p></p>
         <p></p>
       <Space size='middle'>
