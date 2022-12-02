@@ -1,10 +1,11 @@
 import './../App.css';
 
-import React, { useState, useEffect } from "react";
-import { render } from "react-dom";
+import React, { useState } from "react";
 import Axios from "axios";
+import {useParams} from "react-router-dom";
 
-import { Input, Table, Space, Image } from 'antd';
+import { Input, Table, Button, Space, Image } from 'antd';
+import { MoneyCollectOutlined } from '@ant-design/icons';
 import { PlusSquareOutlined, MinusSquareOutlined, CloseSquareOutlined } from '@ant-design/icons';
 import "antd/dist/antd.css";
 
@@ -24,6 +25,9 @@ function showList(response, setOrderList) {
 
 // Should name the function starting with a capital letter!!
 function Order() {
+  const {id} = useParams();
+  console.log(id);
+
   const [OrderId, setOrderId] = useState('');
   const [orderList, setOrderList] = useState([]);
   const {Search} = Input;
@@ -76,6 +80,29 @@ function Order() {
         showList(response, setOrderList);
     });
   };
+
+  const onCheckout = () => {
+    const CustomerId = 5;
+    console.log("onCheckout", "OrderId:", OrderId, "CustomerId:", CustomerId);
+    Axios.get(base_url + 'checkout/', {
+      params: {
+        OrderId: OrderId,
+        CustomerId: CustomerId
+      }
+    }).then((response) => {
+        console.log(response.data[0]);
+
+        alert(`
+        Check out success!
+        You get ${100 - response.data[0]["@discount"] * 100}% OFF on your order, since you've visited for ${response.data[0]["@visits"]} times and spent $${response.data[0]["@preTotal"]} here in the past. 
+        The price after discount is $${response.data[0]["@total"]}. 
+        Hope to see you again!`);
+
+        setOrderList([]);
+
+    })
+  };
+
 
   const columns = [
     {
@@ -149,6 +176,12 @@ function Order() {
             onSearch={onSearch}
             onChange={(e) => setOrderId(e.target.value)}
         />
+        <Button
+            style={{ background: "green", height: 41, color: 'white', borderColor: 'azure'}}
+            icon={<MoneyCollectOutlined />}
+            onClick={onCheckout}>
+                Check Out
+        </Button>
       </Space>
 
 

@@ -18,6 +18,7 @@ require("./routes/popular.routes")(app);
 require("./routes/order.routes")(app);
 require("./routes/customer.routes")(app);
 require("./routes/register.routes")(app);
+require("./routes/login.routes")(app);
 
 app.listen(3002, () => {
     console.log("Server is running on port 3002");

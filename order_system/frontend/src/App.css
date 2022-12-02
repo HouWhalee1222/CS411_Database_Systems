@@ -1,7 +1,8 @@
 /* class selector to select a desired class, can be more than one class */
 /* #idname is the id selector, only one single html element */
 .App {
-  text-align:center;
+  text-align:center; 
+  font-size: calc(10px + 2vmin);
 }
 
 .App-logo {
@@ -16,18 +17,18 @@
 }
 
 .App-header {
-  background-color: azure;
+  background-color: #f0eedd;
   min-height: 150vh;
   display: flex;
   flex-direction: column;
   align-items:center;
   /* justify-content: center; */
-  font-size: calc(10px + 2vmin);
+
   color: black;
 }
 
 .Cus-header {
-  background-color: azure;
+  background-color: #f0eedd;
   min-height: 150vh;
   align-items:center;
   font-size: calc(10px + 2vmin);
@@ -39,16 +40,15 @@
 }
 
 .card-wrapper {
-  background-color: azure;
+  background-color: #f0eedd;
   min-height: 100vh;
-  min-width: 200vh;
-  width: 1000;
   display: flex;
   flex-direction: column;
   align-items:center;
   text-align: center;
   justify-content: center;
   margin: auto;
+  font-size: calc(10px + 2vmin);
   padding: 70px, 0;
   top: 50%;
 }
@@ -69,6 +69,15 @@
 .App-link {
   color:blueviolet;
 }
+
+.red {
+  background-image: url("1.jpg");
+}
+
+.green {
+  background-image: url("2.jpg");
+}
+
 
 @keyframes App-logo-spin {
   from {
