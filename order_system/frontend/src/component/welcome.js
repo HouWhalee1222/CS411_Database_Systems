@@ -82,7 +82,7 @@ function Welcome() {
             GitHub Repos
         </a>
         <p></p>
-        <h3 style={{ fontFamily: "Comic sans MS" }}> Login </h3>
+        <h2 style={{ fontFamily: "Arial Black" }}> Login </h2>
         <Form
             name="login"
             className="login-form"
