@@ -1,8 +1,8 @@
 import './../App.css';
 
-import React, { useState, useEffect } from "react";
-import { render } from "react-dom";
+import React, { useState } from "react";
 import Axios from "axios";
+import {useParams} from "react-router-dom";
 
 import { Input, Table, Button, Space, Image } from 'antd';
 import { MoneyCollectOutlined } from '@ant-design/icons';
@@ -25,6 +25,9 @@ function showList(response, setOrderList) {
 
 // Should name the function starting with a capital letter!!
 function Order() {
+  const {id} = useParams();
+  console.log(id);
+
   const [OrderId, setOrderId] = useState('');
   const [orderList, setOrderList] = useState([]);
   const {Search} = Input;
