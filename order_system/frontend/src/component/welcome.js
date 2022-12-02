@@ -35,13 +35,14 @@ function Welcome() {
                 password: values.password
             }
             }).then((response) => {
-            setcustomerId(response.data.userid);
-            console.log(customerId);
-            if (customerId === -1) {
-                showFail();
-            } else {
-                window.location.href = '/home';
-            }
+                const cusid = response.data.userid;
+                console.log(cusid);
+                setcustomerId(cusid);
+                if (cusid === -1) {
+                    showFail();
+                } else {
+                    window.location.href = '/home';
+                }
         });
     };
 
@@ -58,10 +59,13 @@ function Welcome() {
     <div className="App">
         <header className="App-header" style={bgstyles}>
         <h1>Produce101 - Order System</h1>
-        <Modal title="Login Fail!" open={shownError} onOk={handleConfirm}>
-            <p>Some contents...</p>
-            <p>Some contents...</p>
-            <p>Some contents...</p>
+        <Modal title="Info" open={shownError} onOk={handleConfirm} onCancel={handleConfirm}>
+            <Alert
+            message="Error"
+            description="Wrong Userid or Password!!!"
+            type="error"
+            showIcon
+            />
         </Modal>
         <Space
             direction="vertical"
