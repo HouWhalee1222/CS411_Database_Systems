@@ -4,10 +4,11 @@ import React, { useState, useEffect } from "react";
 import { render } from "react-dom";
 import Axios from "axios";
 
-import { Input, Button, Form } from 'antd';
+import { Input, Button, Form, Space } from 'antd';
 import "antd/dist/antd.css";
 
-import { server_address, backend_port } from './server_config'
+import { server_address, backend_port } from './server_config';
+import welcomeImg from '../asset/welcomeImg.jpg';
 
 // Should name the function starting with a capital letter!!
 function Register() {
@@ -16,7 +17,7 @@ function Register() {
   const base_url = server_address + ':' + backend_port + '/api/register/';
 
   const onFinish = (values) => {
-    console.log('Success! Name:', values.name, 'Phone:', values.phone, 'Password:', values.password);
+    console.log('Registration form COMPLETED! Name:', values.name, 'Phone:', values.phone, 'Password:', values.password);
 
     var DummyCustomerId = 0;
     Axios.post(base_url, {
@@ -25,21 +26,25 @@ function Register() {
       Name: values.name,
       Phone: values.phone
     }).then((response) => {
-      console.log('Submitted to server!');
+      console.log('Registration form submitted to server!');
 
       if(response.data.sqlErrMessage) {
-        console.log(response.data.sqlErrMessage);
+        console.log("SQL raised an error:", response.data.sqlErrMessage);
         if (response.data.sqlErrMessage === "Duplicate Phone Number")
-          alert("Duplicate Phone Number! Try Again!");
+          alert("Registration FAILED! Duplicate Phone Number!");
       } else {
-        console.log("Successfully Registered");
+        console.log("Registration SUCCESS! New customer ID:", response.data[0].CustomerId);
         alert("Congratulations! Your new account is ready for ordering!");
+
+        // Go to home page
+        let new_customer_id = response.data[0].CustomerId;
+        window.location.href = `/home/${new_customer_id}`;
       }
     });
   };
 
   const onFinishFailed = (errorInfo) => {
-    console.log('Failed! Check your info: ', errorInfo);
+    console.log('Registration form ERROR! Check your info: ', errorInfo);
   };
 
   const formItemLayout = {
@@ -66,12 +71,36 @@ function Register() {
     },
   };
 
+  const bgstyles = {
+    backgroundImage: `url(${welcomeImg})`,
+    backgroundPosition:'center',
+    backgroundSize:'cover',
+    backgroundRepeat: 'no-repeat',
+    width:'100vw',
+    height: '100vh'
+  };
+
   return (
     <div className="App">
-      <header className="App-header">
-      <h1>Register</h1>
-      {/* <img src={logo} className="App-logo" alt="logo" /> */}
-      {/* Group th search bar and the button using Space */}
+      <header className="App-header" style={bgstyles}>
+      <h1>Produce101 - Order System</h1>
+
+      <Space
+          direction="vertical"
+          size="large"
+          style={{
+              display: 'flex',
+          }}
+      >
+      <a
+          className="App-link"
+          href="https://github.com/cs411-alawini/fa22-cs411-Q-team050-Produce101"
+          target="_blank"
+          rel="noopener noreferrer">
+          GitHub Repos
+      </a>
+      <p></p>
+      <h3 style={{ fontFamily: "Comic sans MS" }}> Register </h3>
 
       <Form
         {...formItemLayout}
@@ -91,10 +120,10 @@ function Register() {
 
         <Form.Item
           name="phone"
-          label="Phone Number"
+          label="Phone"
           rules={[{ required: true, message: 'Please input your phone number!' }]}
         >
-          <Input style={{ width: '100%' }} />
+          <Input />
         </Form.Item>
 
         <Form.Item
@@ -108,12 +137,12 @@ function Register() {
           ]}
           hasFeedback
         >
-          <Input.Password />
+         <Input.Password />
         </Form.Item>
 
         <Form.Item
           name="confirm"
-          label="Confirm Password"
+          label="Confirm"
           dependencies={['password']}
           hasFeedback
           rules={[
@@ -141,6 +170,7 @@ function Register() {
         </Form.Item>
 
       </Form>
+      </Space>
 
       </header>
     </div>
