@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
 import foodImg from '../asset/food.png';
 import orderImg from '../asset/order.png';
@@ -7,20 +7,36 @@ import customerImg from '../asset/customer.png'
 import {Card, Col, Row } from 'antd';
 import {Link} from 'react-router-dom';
 import {useParams} from "react-router-dom";
+import { server_address, backend_port } from './server_config'
+
+import Axios from "axios";
 
 // Should name the function starting with a capital letter!!
 function Home() {
   const {id} = useParams();
   const foodUrl = `/food/${id}`;
   const orderUrl = `/order/${id}`;
-  console.log(id);
+
+  const [cusName, setCusName] = useState("Abdu");
+
+  // Similar to componentDidMount and componentDidUpdate:
+  useEffect(() => {
+    Axios.get(server_address + ':' + backend_port + '/api/name', {
+      params: {
+        id: id
+      }
+    }).then((response) => {
+      console.log(response.data[0].Name);
+      setCusName(response.data[0].Name);  
+    })
+  }, []);
 
   return (
     <div className='App-router'>
       <div className='card-wrapper'>
       <h1>Produce101 Order System</h1>
-      <h2><em>Welcome you, <b>Abdu</b>!</em></h2>
-      <p></p><p></p><p></p>
+      <h2><em>Welcome you, <b>{cusName}</b>!</em></h2>
+      <p></p>
         <Row gutter={256}>
           <Col span={128}>
             <Card
