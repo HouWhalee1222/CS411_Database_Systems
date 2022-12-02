@@ -5,7 +5,7 @@ import React, { useState } from "react";
 import Axios from "axios";
 import {useParams} from "react-router-dom";
 
-import { Input, Table, Button, Space, Image } from 'antd';
+import { Input, Table, Button, Space, Image, Modal, Alert } from 'antd';
 import { FireOutlined, PlusSquareOutlined } from '@ant-design/icons';
 import "antd/dist/antd.css";
 
@@ -23,6 +23,16 @@ function Food() {
   const search_url = server_address + ':' + backend_port + '/api/search';
   const popular_url = server_address + ':' + backend_port + '/api/popular';
 
+  const [shownError, setShownError] = useState(false);
+
+  const showFail = () => {
+      setShownError(true);
+  }
+
+  const handleConfirm = () => {
+      setShownError(false);
+  }
+
   const showList = (response) => {
     setFoodList(response.data.map(row => ({  // Add the data to table
         dishid: row.DishId,
@@ -38,7 +48,8 @@ function Food() {
     console.log("FoodName:", foodName);
     Axios.get(search_url, {
       params: {
-        foodName: foodName
+        foodName: foodName,
+        id: id
       }
     }).then((response) => {
       // alert('success search');
@@ -61,7 +72,11 @@ function Food() {
 
 
   const searchPopular = () => {
-    Axios.get(popular_url).then((response) => {
+    Axios.get(popular_url, {
+      params: {
+        id: id
+      }
+    }).then((response) => {
         console.log(response);
         showList(response);
     })
@@ -74,7 +89,6 @@ function Food() {
         key: 'image',
         render: (_, record) => (
             <Image
-                // height={100}
                 width={120}
                 src= {require('../asset/Food_Images/' + record.imageurl)}
             />
@@ -96,16 +110,11 @@ function Food() {
       key: 'price',
     },
     {
-      title: 'Description',
-      dataIndex: 'description',
-      key: 'description',
-    },
-    {
         title: 'Actions',
         key: 'actions',
         render: (_, record) => (
           <Space size="large">
-            <a onClick={() => onAdd(record.dishid)}>
+            <a onClick={() => {onAdd(record.dishid); showFail();}}>
                 <PlusSquareOutlined style={{ fontSize: '1.25em' }}/>
             </a>
 
@@ -127,6 +136,15 @@ function Food() {
     },
   ];
 
+  // const testData = [
+  //   {
+  //     key: '1',
+  //     dishid: '10000',
+  //     dishname: 'test food',
+  //     price: 100,
+  //     description: 'test'
+  //   },
+  // ];
 
   return (
     <div className="App">
@@ -149,13 +167,21 @@ function Food() {
             icon={<FireOutlined />}
             onClick={searchPopular}/>
       </Space>
+      <Modal title="Info" open={shownError} onOk={handleConfirm} onCancel={handleConfirm}>
+        <Alert
+        message="Success Tips"
+        description="Add dish success!"
+        type="success"
+        showIcon
+        />
+      </Modal>
         {/* <p></p>
         <p></p>
       <Space size='middle'>
         <Search
             placeholder='Input dish id'
             enterButton="Add dish"
-            allowClear
+            allowClear3
             style={{ width: 300, padding: 0, margin: 0}}
             size="middle"
             // onClick={addFood}
@@ -166,11 +192,26 @@ function Food() {
 
 
       <Table
+        rowKey="dishid" 
         columns={columns}
+        expandable={{
+          expandedRowRender: (record) => (
+            <p
+              style={{
+                margin: 0,
+              }}
+            >
+              {record.description}
+            </p>
+          ),
+          // defaultExpandedRowKeys: true
+        }}
         dataSource={foodList}
         style = {{width: 800, height: 300, padding: 30}}
-        pagination = {{pageSize: 5}}
+        pagination = {{pageSize: 50}}
+        rowClassName={(record, index) => (index === 0 ? "red" : index === 1 ? "green" : "")}
       />
+
 
 
       </header>
