@@ -16,7 +16,7 @@ function Register() {
   const base_url = server_address + ':' + backend_port + '/api/register/';
 
   const onFinish = (values) => {
-    console.log('Success! Name:', values.name, 'Phone:', values.phone, 'Password:', values.password);
+    console.log('Registration form COMPLETED! Name:', values.name, 'Phone:', values.phone, 'Password:', values.password);
 
     var DummyCustomerId = 0;
     Axios.post(base_url, {
@@ -25,21 +25,25 @@ function Register() {
       Name: values.name,
       Phone: values.phone
     }).then((response) => {
-      console.log('Submitted to server!');
+      console.log('Registration form submitted to server!');
 
       if(response.data.sqlErrMessage) {
-        console.log(response.data.sqlErrMessage);
+        console.log("SQL raised an error:", response.data.sqlErrMessage);
         if (response.data.sqlErrMessage === "Duplicate Phone Number")
-          alert("Duplicate Phone Number! Try Again!");
+          alert("Registration FAILED! Duplicate Phone Number!");
       } else {
-        console.log("Successfully Registered");
+        console.log("Registration SUCCESS! New customer ID:", response.data[0].CustomerId);
         alert("Congratulations! Your new account is ready for ordering!");
+
+        let new_customer_id = response.data[0].CustomerId;
+
+        window.location.href = "/";
       }
     });
   };
 
   const onFinishFailed = (errorInfo) => {
-    console.log('Failed! Check your info: ', errorInfo);
+    console.log('Registration form ERROR! Check your info: ', errorInfo);
   };
 
   const formItemLayout = {
