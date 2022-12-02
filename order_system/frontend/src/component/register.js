@@ -100,7 +100,7 @@ function Register() {
           GitHub Repos
       </a>
       <p></p>
-      <h3 style={{ fontFamily: "Comic sans MS" }}> Register </h3>
+      <h3 style={{ fontFamily: "Arial Black" }}> Register </h3>
 
       <Form
         {...formItemLayout}
