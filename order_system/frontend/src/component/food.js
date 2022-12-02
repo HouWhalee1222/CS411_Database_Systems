@@ -69,7 +69,8 @@ function Food() {
         key: 'image',
         render: (_, record) => (
             <Image
-                height={120}
+                // height={100}
+                width={100}
                 src= {require('../asset/Food_Images/' + record.imageurl)}
             />
         ),
