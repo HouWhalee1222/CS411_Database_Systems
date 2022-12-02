@@ -3,7 +3,7 @@ import './../App.css';
 import React, { useState } from "react";
 import Axios from "axios";
 
-import { Button, Checkbox, Form, Input, Space, Alert } from 'antd';
+import { Button, Checkbox, Form, Input, Space, Alert, Modal } from 'antd';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import "antd/dist/antd.css";
 
@@ -14,11 +14,21 @@ import welcomeImg from '../asset/welcomeImg.jpg';
 // Should name the function starting with a capital letter!!
 function Welcome() {
 
-  const [customerId, setcustomerId] = useState(-1);
+    const [customerId, setcustomerId] = useState(-1);
+    const [shownError, setShownError] = useState(false);
 
-  const login_url = server_address + ':' + backend_port + '/api/login';
+    const showFail = () => {
+        setShownError(true);
+    }
 
-  const onFinish = (values) => {
+    const handleConfirm = () => {
+        setShownError(false);
+    }
+
+    const login_url = server_address + ':' + backend_port + '/api/login';
+
+    const onFinish = (values) => {
+        console.log(values);
         Axios.get(login_url, {
             params: {
                 userid: values.userid,
@@ -28,21 +38,14 @@ function Welcome() {
             setcustomerId(response.data.userid);
             console.log(customerId);
             if (customerId === -1) {
-                return (
-                    <Alert
-                        message="Error"
-                        description="Wrong UserId or Password!"
-                        type="error"
-                        showIcon
-                    />
-                );
+                showFail();
             } else {
                 window.location.href = '/home';
             }
         });
-  };
+    };
 
-  const bgstyles = {
+    const bgstyles = {
         backgroundImage: `url(${welcomeImg})`,
         backgroundPosition: 'center',
         backgroundSize: 'cover',
@@ -51,10 +54,15 @@ function Welcome() {
         height: '100vh'
     };
 
-  return (
+    return (
     <div className="App">
         <header className="App-header" style={bgstyles}>
         <h1>Produce101 - Order System</h1>
+        <Modal title="Login Fail!" open={shownError} onOk={handleConfirm}>
+            <p>Some contents...</p>
+            <p>Some contents...</p>
+            <p>Some contents...</p>
+        </Modal>
         <Space
             direction="vertical"
             size="large"
@@ -123,9 +131,9 @@ function Welcome() {
         </Form>
         </Space>
 
-      </header>
+        </header>
     </div>
-  );
+    );
 }
 
 export default Welcome;
