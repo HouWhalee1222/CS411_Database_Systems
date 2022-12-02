@@ -38,7 +38,8 @@ function Food() {
     console.log("FoodName:", foodName);
     Axios.get(search_url, {
       params: {
-        foodName: foodName
+        foodName: foodName,
+        id: id
       }
     }).then((response) => {
       // alert('success search');
@@ -61,7 +62,11 @@ function Food() {
 
 
   const searchPopular = () => {
-    Axios.get(popular_url).then((response) => {
+    Axios.get(popular_url, {
+      params: {
+        id: id
+      }
+    }).then((response) => {
         console.log(response);
         showList(response);
     })
