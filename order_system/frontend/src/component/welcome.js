@@ -3,7 +3,7 @@ import './../App.css';
 import React, { useState } from "react";
 import Axios from "axios";
 
-import { Button, Checkbox, Form, Input, Space } from 'antd';
+import { Button, Checkbox, Form, Input, Space, Alert } from 'antd';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import "antd/dist/antd.css";
 
@@ -14,11 +14,32 @@ import welcomeImg from '../asset/welcomeImg.jpg';
 // Should name the function starting with a capital letter!!
 function Welcome() {
 
-  const search_url = server_address + ':' + backend_port + '/api/search';
-  const popular_url = server_address + ':' + backend_port + '/api/popular';
+  const [customerId, setcustomerId] = useState(-1);
+
+  const login_url = server_address + ':' + backend_port + '/api/login';
 
   const onFinish = (values) => {
-    console.log(values);
+        Axios.get(login_url, {
+            params: {
+                userid: values.userid,
+                password: values.password
+            }
+            }).then((response) => {
+            setcustomerId(response.data.userid);
+            console.log(customerId);
+            if (customerId === -1) {
+                return (
+                    <Alert
+                        message="Error"
+                        description="Wrong UserId or Password!"
+                        type="error"
+                        showIcon
+                    />
+                );
+            } else {
+                window.location.href = '/home';
+            }
+        });
   };
 
   const bgstyles = {
@@ -59,15 +80,15 @@ function Welcome() {
             onFinish={onFinish}>
 
             <Form.Item
-                name="username"
+                name="userid"
                 rules={[
                     {
                         required: true,
-                        message: 'Please input your user name~',
+                        message: 'Please input your user id~',
                     },
                 ]}
             >
-                <Input prefix={<UserOutlined className="site-form-item-icon"/>} placeholder="Username"/>
+                <Input prefix={<UserOutlined className="site-form-item-icon"/>} placeholder="UserId"/>
             </Form.Item>
             <Form.Item
                 name="password"
