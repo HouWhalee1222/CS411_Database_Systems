@@ -1,4 +1,5 @@
 npm install axios
 npm install antd
 
+npm i
 npm start
