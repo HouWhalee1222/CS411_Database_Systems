@@ -36,9 +36,9 @@ function Register() {
         console.log("Registration SUCCESS! New customer ID:", response.data[0].CustomerId);
         alert("Congratulations! Your new account is ready for ordering!");
 
+        // Go to home page
         let new_customer_id = response.data[0].CustomerId;
-
-        window.location.href = "/";
+        window.location.href = `/home/${new_customer_id}`;
       }
     });
   };
