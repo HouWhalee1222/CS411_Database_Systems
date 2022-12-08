@@ -20,8 +20,8 @@
 |   Info      |        Description                                                    |
 | ----------- | --------------------------------------------------------------------  |
 |  Title      | An intelligent restaurant ordering and recommendation database system |
-| System URL  |                 link_to_system                                        |
-| Video Link  |                 link_to_video                                         |
+| System URL  |                 34.123.13.43   |
+| Video Link  |                 (https://illinois.zoom.us/rec/share/WB0BgGqKEo8z8zjYzo8D3C5e6NkATXCYY9a5Xp2-0TWtTVAwgFL85um1eIj59XKI.lk6ZXGW229-0qGmW?startTime=1670359197000)|
 
 ## Project Summary
 
